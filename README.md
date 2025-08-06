@@ -40,7 +40,7 @@ This is an intentionally vulnerable agentic agent designed to demonstrate OWASP 
    ```bash
    # If you have git
    git clone https://github.com/not2cleverdotme/Agent_OWASP.git
-   cd vulnerable-agentic-agent
+   cd Agent_OWASP
    
    # Or download and extract the files
    ```
