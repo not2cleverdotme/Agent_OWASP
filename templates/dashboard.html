@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Vulnerable Agent</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-info {
+            text-align: right;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .vulnerability-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .logout-btn {
+            background: #e74c3c;
+        }
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>🔓 Vulnerable Agent Dashboard</h1>
+                <p>Welcome to the intentionally insecure dashboard</p>
+            </div>
+            <div class="user-info">
+                <p>Logged in as: <strong>{{ user.username }}</strong></p>
+                <p>Role: <strong>{{ user.role }}</strong></p>
+                <a href="/" style="color: white; text-decoration: none;">
+                    <button class="logout-btn">Back to Main</button>
+                </a>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h3>🤖 Agent Task Execution</h3>
+                <p>Execute tasks through the vulnerable agent system:</p>
+                
+                <div class="form-group">
+                    <label for="taskInput">Task Command:</label>
+                    <textarea id="taskInput" rows="3" placeholder="Enter task command..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userId">User ID:</label>
+                    <input type="text" id="userId" value="{{ user.user_id }}" placeholder="User ID">
+                </div>
+                
+                <button onclick="executeTask()">Execute Task</button>
+                
+                <div id="taskResult" class="result" style="display: none;"></div>
+                
+                <div class="vulnerability-info">
+                    <strong>Vulnerabilities:</strong>
+                    <ul>
+                        <li>No input validation</li>
+                        <li>Command injection possible</li>
+                        <li>SQL injection possible</li>
+                        <li>No proper authorization checks</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>📊 User Data Management</h3>
+                <p>Test SQL injection vulnerabilities:</p>
+                
+                <div class="form-group">
+                    <label for="sqlUserId">User ID (SQL Injection Test):</label>
+                    <input type="text" id="sqlUserId" value="1 OR 1=1" placeholder="Try: 1 OR 1=1">
+                </div>
+                
+                <button onclick="getUserData()">Get User Data</button>
+                
+                <div id="userDataResult" class="result" style="display: none;"></div>
+                
+                <div class="vulnerability-info">
+                    <strong>SQL Injection Examples:</strong>
+                    <ul>
+                        <li><code>1 OR 1=1</code> - Get all data</li>
+                        <li><code>1; DROP TABLE users; --</code> - Drop table</li>
+                        <li><code>1 UNION SELECT * FROM users --</code> - Union attack</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>💻 Command Execution</h3>
+                <p>Test command injection vulnerabilities:</p>
+                
+                <div class="form-group">
+                    <label for="commandInput">Command:</label>
+                    <input type="text" id="commandInput" value="ls -la" placeholder="Try: ls -la; cat /etc/passwd">
+                </div>
+                
+                <button onclick="executeCommand()">Execute Command</button>
+                
+                <div id="commandResult" class="result" style="display: none;"></div>
+                
+                <div class="vulnerability-info">
+                    <strong>Command Injection Examples:</strong>
+                    <ul>
+                        <li><code>ls -la</code> - List files</li>
+                        <li><code>cat /etc/passwd</code> - Read password file</li>
+                        <li><code>whoami</code> - Check current user</li>
+                        <li><code>ls -la; cat /etc/passwd</code> - Multiple commands</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>🌐 SSRF Testing</h3>
+                <p>Test Server-Side Request Forgery vulnerabilities:</p>
+                
+                <div class="form-group">
+                    <label for="ssrfUrl">URL:</label>
+                    <input type="text" id="ssrfUrl" value="http://localhost:5000/api/debug" placeholder="Try: http://localhost:5000/api/debug">
+                </div>
+                
+                <button onclick="testSSRF()">Test SSRF</button>
+                
+                <div id="ssrfResult" class="result" style="display: none;"></div>
+                
+                <div class="vulnerability-info">
+                    <strong>SSRF Examples:</strong>
+                    <ul>
+                        <li><code>http://localhost:5000/api/debug</code> - Internal debug info</li>
+                        <li><code>http://127.0.0.1:22</code> - Port scanning</li>
+                        <li><code>file:///etc/passwd</code> - File reading</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function executeTask() {
+            const task = document.getElementById('taskInput').value;
+            const userId = document.getElementById('userId').value;
+            
+            try {
+                const response = await fetch('/api/agent/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ task, user_id: userId })
+                });
+                
+                const result = await response.json();
+                document.getElementById('taskResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('taskResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('taskResult').textContent = 'Error: ' + error.message;
+                document.getElementById('taskResult').style.display = 'block';
+            }
+        }
+        
+        async function getUserData() {
+            const userId = document.getElementById('sqlUserId').value;
+            
+            try {
+                const response = await fetch(`/api/user_data?user_id=${encodeURIComponent(userId)}`);
+                const result = await response.json();
+                document.getElementById('userDataResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('userDataResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('userDataResult').textContent = 'Error: ' + error.message;
+                document.getElementById('userDataResult').style.display = 'block';
+            }
+        }
+        
+        async function executeCommand() {
+            const command = document.getElementById('commandInput').value;
+            
+            try {
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ command })
+                });
+                
+                const result = await response.json();
+                document.getElementById('commandResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('commandResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('commandResult').textContent = 'Error: ' + error.message;
+                document.getElementById('commandResult').style.display = 'block';
+            }
+        }
+        
+        async function testSSRF() {
+            const url = document.getElementById('ssrfUrl').value;
+            
+            try {
+                const response = await fetch('/api/fetch_url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+                
+                const result = await response.json();
+                document.getElementById('ssrfResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('ssrfResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('ssrfResult').textContent = 'Error: ' + error.message;
+                document.getElementById('ssrfResult').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html> 

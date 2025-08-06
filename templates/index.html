@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerable Agentic Agent - Educational Purpose</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .warning {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+        .vulnerability-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #666;
+        }
+        .nav-tab.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔓 Vulnerable Agentic Agent</h1>
+            <p>Educational Platform for OWASP Security Learning</p>
+        </div>
+        
+        <div class="warning">
+            ⚠️ <strong>WARNING:</strong> This application is intentionally insecure for educational purposes. 
+            DO NOT use with real data or in production environments.
+        </div>
+        
+        <div class="content">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('agent')">Agent Interface</button>
+                <button class="nav-tab" onclick="showTab('login')">Login</button>
+                <button class="nav-tab" onclick="showTab('vulnerabilities')">Vulnerability Tests</button>
+                <button class="nav-tab" onclick="showTab('debug')">Debug Info</button>
+            </div>
+            
+            <!-- Agent Interface Tab -->
+            <div id="agent" class="tab-content active">
+                <div class="section">
+                    <h3>🤖 Agent Task Execution</h3>
+                    <p>Execute various tasks through the vulnerable agent:</p>
+                    
+                    <div class="form-group">
+                        <label for="taskInput">Task Command:</label>
+                        <textarea id="taskInput" rows="3" placeholder="Enter task command..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userId">User ID:</label>
+                        <input type="text" id="userId" value="1" placeholder="User ID">
+                    </div>
+                    
+                    <button onclick="executeTask()">Execute Task</button>
+                    
+                    <div id="taskResult" class="result" style="display: none;"></div>
+                    
+                    <div class="vulnerability-info">
+                        <strong>Vulnerabilities:</strong>
+                        <ul>
+                            <li>No input validation</li>
+                            <li>Command injection possible</li>
+                            <li>SQL injection possible</li>
+                            <li>No authentication required</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Login Tab -->
+            <div id="login" class="tab-content">
+                <div class="section">
+                    <h3>🔐 Authentication</h3>
+                    <p>Test weak authentication mechanisms:</p>
+                    
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" value="admin">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" value="admin123">
+                    </div>
+                    
+                    <button onclick="login()">Login</button>
+                    
+                    <div id="loginResult" class="result" style="display: none;"></div>
+                    
+                    <div class="vulnerability-info">
+                        <strong>Vulnerabilities:</strong>
+                        <ul>
+                            <li>Weak password (admin123)</li>
+                            <li>No session timeout</li>
+                            <li>No rate limiting</li>
+                            <li>Hardcoded credentials</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vulnerability Tests Tab -->
+            <div id="vulnerabilities" class="tab-content">
+                <div class="section">
+                    <h3>🧪 Vulnerability Testing</h3>
+                    
+                    <h4>SQL Injection Test</h4>
+                    <div class="form-group">
+                        <label for="sqlUserId">User ID:</label>
+                        <input type="text" id="sqlUserId" value="1 OR 1=1" placeholder="Try: 1 OR 1=1">
+                    </div>
+                    <button onclick="testSqlInjection()">Test SQL Injection</button>
+                    <div id="sqlResult" class="result" style="display: none;"></div>
+                    
+                    <h4>Command Injection Test</h4>
+                    <div class="form-group">
+                        <label for="commandInput">Command:</label>
+                        <input type="text" id="commandInput" value="ls -la" placeholder="Try: ls -la; cat /etc/passwd">
+                    </div>
+                    <button onclick="testCommandInjection()">Test Command Injection</button>
+                    <div id="commandResult" class="result" style="display: none;"></div>
+                    
+                    <h4>SSRF Test</h4>
+                    <div class="form-group">
+                        <label for="ssrfUrl">URL:</label>
+                        <input type="text" id="ssrfUrl" value="http://localhost:5000/api/debug" placeholder="Try: http://localhost:5000/api/debug">
+                    </div>
+                    <button onclick="testSSRF()">Test SSRF</button>
+                    <div id="ssrfResult" class="result" style="display: none;"></div>
+                    
+                    <h4>File Upload Test</h4>
+                    <div class="form-group">
+                        <label for="fileUpload">File:</label>
+                        <input type="file" id="fileUpload">
+                    </div>
+                    <button onclick="testFileUpload()">Test File Upload</button>
+                    <div id="uploadResult" class="result" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- Debug Info Tab -->
+            <div id="debug" class="tab-content">
+                <div class="section">
+                    <h3>🐛 Debug Information</h3>
+                    <p>Exposed sensitive information (intentionally vulnerable):</p>
+                    
+                    <button onclick="getDebugInfo()">Get Debug Info</button>
+                    
+                    <div id="debugResult" class="result" style="display: none;"></div>
+                    
+                    <div class="vulnerability-info">
+                        <strong>Vulnerabilities:</strong>
+                        <ul>
+                            <li>Exposed configuration</li>
+                            <li>Revealed secrets</li>
+                            <li>Environment variables exposed</li>
+                            <li>Debug information available</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
+        async function executeTask() {
+            const task = document.getElementById('taskInput').value;
+            const userId = document.getElementById('userId').value;
+            
+            try {
+                const response = await fetch('/api/agent/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ task, user_id: userId })
+                });
+                
+                const result = await response.json();
+                document.getElementById('taskResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('taskResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('taskResult').textContent = 'Error: ' + error.message;
+                document.getElementById('taskResult').style.display = 'block';
+            }
+        }
+        
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+                });
+                
+                if (response.ok) {
+                    document.getElementById('loginResult').textContent = 'Login successful!';
+                } else {
+                    document.getElementById('loginResult').textContent = 'Login failed!';
+                }
+                document.getElementById('loginResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('loginResult').textContent = 'Error: ' + error.message;
+                document.getElementById('loginResult').style.display = 'block';
+            }
+        }
+        
+        async function testSqlInjection() {
+            const userId = document.getElementById('sqlUserId').value;
+            
+            try {
+                const response = await fetch(`/api/user_data?user_id=${encodeURIComponent(userId)}`);
+                const result = await response.json();
+                document.getElementById('sqlResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('sqlResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('sqlResult').textContent = 'Error: ' + error.message;
+                document.getElementById('sqlResult').style.display = 'block';
+            }
+        }
+        
+        async function testCommandInjection() {
+            const command = document.getElementById('commandInput').value;
+            
+            try {
+                const response = await fetch('/api/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ command })
+                });
+                
+                const result = await response.json();
+                document.getElementById('commandResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('commandResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('commandResult').textContent = 'Error: ' + error.message;
+                document.getElementById('commandResult').style.display = 'block';
+            }
+        }
+        
+        async function testSSRF() {
+            const url = document.getElementById('ssrfUrl').value;
+            
+            try {
+                const response = await fetch('/api/fetch_url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+                
+                const result = await response.json();
+                document.getElementById('ssrfResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('ssrfResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('ssrfResult').textContent = 'Error: ' + error.message;
+                document.getElementById('ssrfResult').style.display = 'block';
+            }
+        }
+        
+        async function testFileUpload() {
+            const fileInput = document.getElementById('fileUpload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                document.getElementById('uploadResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('uploadResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('uploadResult').textContent = 'Error: ' + error.message;
+                document.getElementById('uploadResult').style.display = 'block';
+            }
+        }
+        
+        async function getDebugInfo() {
+            try {
+                const response = await fetch('/api/debug');
+                const result = await response.json();
+                document.getElementById('debugResult').textContent = JSON.stringify(result, null, 2);
+                document.getElementById('debugResult').style.display = 'block';
+            } catch (error) {
+                document.getElementById('debugResult').textContent = 'Error: ' + error.message;
+                document.getElementById('debugResult').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,6 @@
+# Intentionally vulnerable dependencies for OWASP learning
+Flask==2.0.1  # Outdated version with known vulnerabilities
+Werkzeug==2.0.1  # Outdated version
+requests==2.25.1  # Outdated version vulnerable to SSRF
+cryptography==3.4.8  # Outdated version with known issues
+PyJWT==1.7.1  # Outdated version with weak algorithms 
