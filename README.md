@@ -39,7 +39,7 @@ This is an intentionally vulnerable agentic agent designed to demonstrate OWASP 
 1. **Clone or Download the Project**
    ```bash
    # If you have git
-   git clone <repository-url>
+   git clone https://github.com/not2cleverdotme/Agent_OWASP.git
    cd vulnerable-agentic-agent
    
    # Or download and extract the files
